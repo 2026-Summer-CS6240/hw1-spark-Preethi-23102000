@@ -2,8 +2,8 @@
 
 # Customize these paths for your environment.
 # -----------------------------------------------------------
-spark.root=/usr/local/spark-3.3.2-bin-without-hadoop
-hadoop.root=/usr/local/hadoop-3.3.5
+spark.root=spark.root=D:/NEU/Summer-26/CS6240-LSPDP/software/spark-3.3.2-bin-without-hadoop/spark-3.3.2-bin-without-hadoop
+hadoop.root=D:/NEU/Summer-26/CS6240-LSPDP/software/hadoop-3.3.5/hadoop-3.3.5
 app.name=Word Count
 jar.name=spark-demo.jar
 maven.jar.name=spark-demo-1.0.jar
@@ -30,11 +30,11 @@ aws.instance.type=m4.large
 # Compiles code and builds jar (with dependencies).
 jar:
 	mvn clean package
-	cp target/${maven.jar.name} ${jar.name}
+	copy target\${maven.jar.name} ${jar.name}
 
 # Removes local output directory.
 clean-local-output:
-	rm -rf ${local.output}*
+	if exist ${local.output} rmdir /s /q ${local.output}
 
 # Runs standalone
 local: jar clean-local-output
