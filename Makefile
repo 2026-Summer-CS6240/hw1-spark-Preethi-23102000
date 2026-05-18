@@ -2,7 +2,7 @@
 
 # Customize these paths for your environment.
 # -----------------------------------------------------------
-spark.root=spark.root=D:/NEU/Summer-26/CS6240-LSPDP/software/spark-3.3.2-bin-without-hadoop/spark-3.3.2-bin-without-hadoop
+spark.root=D:/NEU/Summer-26/CS6240-LSPDP/software/spark-3.3.2-bin-without-hadoop/spark-3.3.2-bin-without-hadoop
 hadoop.root=D:/NEU/Summer-26/CS6240-LSPDP/software/hadoop-3.3.5/hadoop-3.3.5
 app.name=Word Count
 jar.name=spark-demo.jar
