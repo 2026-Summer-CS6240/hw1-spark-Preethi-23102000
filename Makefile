@@ -11,13 +11,14 @@ job.name=wc.WordCountMain
 local.master=local[4]
 local.input=input
 local.output=output
+local.logAws=log_aws
 # Pseudo-Cluster Execution
 hdfs.user.name=joe
 hdfs.input=input
 hdfs.output=output
 # AWS EMR Execution
 aws.emr.release=emr-6.10.0
-aws.bucket.name=cs6240-demo-bucket
+aws.bucket.name=cs6240-preethi-demo-bucket-v1
 aws.input=input
 aws.output=output
 aws.log.dir=log
@@ -35,6 +36,10 @@ jar:
 # Removes local output directory.
 clean-local-output:
 	if exist ${local.output} rmdir /s /q ${local.output}
+
+# Removes local log directory.
+clean-local-log:
+	if exist ${local.logAws} rmdir /s /q ${local.logAws}
 
 # Runs standalone
 local: jar clean-local-output
@@ -77,7 +82,7 @@ clean-hdfs-output:
 	${hadoop.root}/bin/hdfs dfs -rm -r -f ${hdfs.output}*
 
 # Download output from HDFS to local.
-download-output-hdfs:
+download-output-hdfs: clean-local-output
 	mkdir ${local.output}
 	${hadoop.root}/bin/hdfs dfs -get ${hdfs.output}/* ${local.output}
 
@@ -97,13 +102,22 @@ pseudoq: jar clean-local-output clean-hdfs-output
 make-bucket:
 	aws s3 mb s3://${aws.bucket.name}
 
+# Delete S3 bucket and all contents.
+delete-bucket-aws:
+	aws s3 rb s3://${aws.bucket.name} --force
+
 # Upload data to S3 input dir.
 upload-input-aws: make-bucket
-	aws s3 sync ${local.input} s3://${aws.bucket.name}/${aws.input}
+	aws s3 cp ${local.input} s3://${aws.bucket.name}/${aws.input} --recursive
 	
 # Delete S3 output dir.
 delete-output-aws:
 	aws s3 rm s3://${aws.bucket.name}/ --recursive --exclude "*" --include "${aws.output}*"
+
+# Delete S3 log dir.
+delete-log-aws:
+	aws s3 rm s3://${aws.bucket.name}/ --recursive --exclude "*" --include "${aws.log.dir}*"
+
 
 # Upload application to S3 bucket.
 upload-app-aws:
@@ -127,6 +141,12 @@ aws: jar upload-app-aws delete-output-aws
 download-output-aws: clean-local-output
 	mkdir ${local.output}
 	aws s3 sync s3://${aws.bucket.name}/${aws.output} ${local.output}
+
+# Download logs from S3.
+download-logs-aws: clean-local-log
+	mkdir ${local.logAws}
+	aws s3 sync s3://${aws.bucket.name}/${aws.log.dir} ${local.logAws}
+
 
 # Change to standalone mode.
 switch-standalone:

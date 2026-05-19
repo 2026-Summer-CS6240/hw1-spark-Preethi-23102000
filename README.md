@@ -64,3 +64,7 @@ All of the build & execution commands are organized in the Makefile.
 	- `make upload-input-aws`		-- only before first execution
 	- `make aws`					-- check for successful execution with web interface (aws.amazon.com)
 	- `download-output-aws`		-- after successful execution & termination
+
+OneDrive Link for AWS Output and Logs
+---------
+https://1drv.ms/f/c/02a0a5763eda2474/IgBqNzrr_U6pSqHYTOeU1fxtAbvyRrlWefOWNBpMxMLDtkw?e=kHnUQ7
